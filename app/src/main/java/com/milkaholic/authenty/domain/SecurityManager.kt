@@ -23,13 +23,17 @@ class SecurityManager private constructor(private val context: Context) {
     private val securityEventRepository = SecurityEventRepository(context)
     private val securitySettings = SecuritySettings(context)
     private val scope = CoroutineScope(Dispatchers.IO)
+    
+    private val duressModePrefs = context.getSharedPreferences("duress_mode_prefs", Context.MODE_PRIVATE)
 
-    private val _isDuressMode = MutableStateFlow(false)
+    private val _isDuressMode = MutableStateFlow(duressModePrefs.getBoolean(KEY_DURESS_MODE_ACTIVE, false))
     val isDuressMode: StateFlow<Boolean> = _isDuressMode.asStateFlow()
 
     companion object {
         @Volatile
         private var INSTANCE: SecurityManager? = null
+        
+        private const val KEY_DURESS_MODE_ACTIVE = "duress_mode_active"
 
         fun getInstance(context: Context): SecurityManager {
             return INSTANCE ?: synchronized(this) {
@@ -73,6 +77,7 @@ class SecurityManager private constructor(private val context: Context) {
 
     fun triggerDuressMode() {
         _isDuressMode.value = true
+        duressModePrefs.edit().putBoolean(KEY_DURESS_MODE_ACTIVE, true).apply()
         scope.launch {
             logEvent(
                 SecurityEventType.SUSPICIOUS_ACTIVITY,
@@ -84,6 +89,7 @@ class SecurityManager private constructor(private val context: Context) {
     
     fun clearDuressMode() {
         _isDuressMode.value = false
+        duressModePrefs.edit().putBoolean(KEY_DURESS_MODE_ACTIVE, false).apply()
     }
 
     fun logAuthenticationSuccess(method: String, details: Map<String, String> = emptyMap()) {

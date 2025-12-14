@@ -58,7 +58,9 @@ fun AppDrawer(
             icon = Icons.Default.Settings,
             label = "Settings",
             onClick = {
-                navController.navigate("settings")
+                navController.navigate("settings") {
+                    launchSingleTop = true
+                }
                 closeDrawer()
             }
         )
@@ -67,7 +69,9 @@ fun AppDrawer(
             icon = Icons.Default.Person,
             label = "Profiles",
             onClick = {
-                navController.navigate("profile_management")
+                navController.navigate("profile_management") {
+                    launchSingleTop = true
+                }
                 closeDrawer()
             }
         )
