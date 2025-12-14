@@ -2,10 +2,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.fingerprint" android:required="false" />
+    
+    <!-- Camera permission for QR code scanning -->
     <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- Biometric authentication permissions -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    
+    <!-- Device security access for integrity checks -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" 
+        tools:ignore="QueryAllPackagesPermission" />
+    
+    <!-- Haptic feedback for PIN entry -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    
+    <!-- Network state for security monitoring (optional) -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Device admin for enhanced security checks (optional) -->
+    <uses-permission android:name="android.permission.DEVICE_ADMIN" />
+    
+    <!-- Notification permission for security alerts (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 
     <application

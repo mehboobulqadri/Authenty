@@ -28,6 +28,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import java.util.concurrent.Executors
+import androidx.compose.runtime.DisposableEffect
+
+import com.milkaholic.authenty.ui.theme.BouncyButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,10 +60,11 @@ fun ScanScreen(
         }
     )
 
-    LaunchedEffect(Unit) {
+    DisposableEffect(Unit) {
         if (!hasCameraPermission) {
             launcher.launch(Manifest.permission.CAMERA)
         }
+        onDispose {}
     }
 
     Scaffold(
@@ -166,7 +170,7 @@ fun ScanScreen(
                 .padding(bottom = 32.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            TextButton(onClick = { navController.navigate("add_account") }) {
+            BouncyButton(onClick = { navController.navigate("add_account") }) {
                 Text("Enter setup key manually", style = MaterialTheme.typography.bodyLarge)
             }
         }
