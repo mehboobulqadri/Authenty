@@ -76,8 +76,8 @@ class SecurityManager private constructor(private val context: Context) {
     }
 
     fun triggerDuressMode() {
+        duressModePrefs.edit().putBoolean(KEY_DURESS_MODE_ACTIVE, true).commit()
         _isDuressMode.value = true
-        duressModePrefs.edit().putBoolean(KEY_DURESS_MODE_ACTIVE, true).apply()
         scope.launch {
             logEvent(
                 SecurityEventType.SUSPICIOUS_ACTIVITY,
@@ -88,8 +88,15 @@ class SecurityManager private constructor(private val context: Context) {
     }
     
     fun clearDuressMode() {
+        duressModePrefs.edit().putBoolean(KEY_DURESS_MODE_ACTIVE, false).commit()
         _isDuressMode.value = false
-        duressModePrefs.edit().putBoolean(KEY_DURESS_MODE_ACTIVE, false).apply()
+        scope.launch {
+            logEvent(
+                SecurityEventType.SETTINGS_MODIFIED,
+                "Duress Mode deactivated - Normal operation restored",
+                SecurityEventSeverity.INFO
+            )
+        }
     }
 
     fun logAuthenticationSuccess(method: String, details: Map<String, String> = emptyMap()) {
